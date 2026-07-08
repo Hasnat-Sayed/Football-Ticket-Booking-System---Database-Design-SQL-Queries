@@ -66,3 +66,17 @@ INSERT INTO Bookings (booking_id, user_id, match_id, seat_number, payment_status
 SELECT match_id, fixture, base_ticket_price
 FROM Matches
 WHERE tournament_category = 'Champions League' and match_status = 'Available';
+
+-- QUERY 2: Users whose full name starts with 'Tanvir' OR contains 'Haque'(case-insensitive)
+SELECT user_id, full_name, email
+FROM Users
+WHERE full_name ILIKE 'Tanvir%' OR full_name ILIKE '%Haque%';
+
+-- QUERY 3: Bookings with null payment_status
+SELECT
+    booking_id,
+    user_id,
+    match_id,
+    COALESCE(payment_status, 'Action Required') AS systematic_status
+FROM Bookings
+WHERE payment_status IS NULL;
