@@ -62,17 +62,17 @@ INSERT INTO Bookings (booking_id, user_id, match_id, seat_number, payment_status
 (504, 2, 101, NULL, NULL, 150.00),
 (505, 3, 102, 'C-20', 'Pending', 120.00);
 
--- QUERY 1: Upcoming UCL matches that are Available
+-- QUERY 1: 
 SELECT match_id, fixture, base_ticket_price
 FROM Matches
 WHERE tournament_category = 'Champions League' and match_status = 'Available';
 
--- QUERY 2: Users whose full name starts with 'Tanvir' OR contains 'Haque'(case-insensitive)
+-- QUERY 2: 
 SELECT user_id, full_name, email
 FROM Users
 WHERE full_name ILIKE 'Tanvir%' OR full_name ILIKE '%Haque%';
 
--- QUERY 3: Bookings with null payment_status
+-- QUERY 3:
 SELECT
     booking_id,
     user_id,
@@ -80,3 +80,33 @@ SELECT
     COALESCE(payment_status, 'Action Required') AS systematic_status
 FROM Bookings
 WHERE payment_status IS NULL;
+
+
+-- QUERY 4:
+SELECT
+    b.booking_id,
+    u.full_name,
+    m.fixture,
+    b.total_cost
+FROM Bookings b
+INNER JOIN Users u ON b.user_id = u.user_id
+INNER JOIN Matches m ON b.match_id = m.match_id;
+
+-- QUERY 5:
+SELECT
+    u.user_id,
+    u.full_name,
+    b.booking_id
+FROM Users u
+LEFT JOIN Bookings b ON u.user_id = b.user_id;
+
+-- QUERY 6: 
+SELECT booking_id, match_id, total_cost
+FROM Bookings
+WHERE total_cost > (SELECT AVG(total_cost) FROM Bookings);
+
+-- QUERY 7:
+SELECT match_id, fixture, base_ticket_price
+FROM Matches
+ORDER BY base_ticket_price DESC
+LIMIT 2 OFFSET 1;
